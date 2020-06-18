@@ -70,15 +70,15 @@ def afterDart(arr):
     
 
 
-def showResult():
+def showResult(coordArr):
     xArr = []
     yArr = []
     img = cv2.imread('assets/screenshot.png')
     if coordArr and len(coordArr) > 0:
         for i in range(len(coordArr)):
-            cv2.circle(img, (coordArr[i][0][0], coordArr[i][0][1]), 2, (0, 255, 255), -1)
-            xArr.append(coordArr[i][0][0])
-            yArr.append(coordArr[i][0][1])
+            cv2.circle(img, (coordArr[i][0], coordArr[i][1]), 2, (0, 255, 255), -1)
+            xArr.append(coordArr[i][0])
+            yArr.append(coordArr[i][1])
 
         a, b = bestFit(xArr, yArr)
         height, width, channels = img.shape
