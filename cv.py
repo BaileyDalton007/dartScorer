@@ -13,7 +13,7 @@ ap.add_argument("-b", "--buffer", type=int, default=64,
 args = vars(ap.parse_args())
 
 # use bgr_hsv_converter.py to get upper and lower values
-colorLower = (-5, 100, 100)
+colorLower = (5, 100, 100)
 colorUpper = (15, 255, 255)
 pts = deque(maxlen=args["buffer"])
  
@@ -58,7 +58,7 @@ while True:
 
             lastCoords = center
             
-            #how far back the comparison goes 
+            #how far back the comparison goes   
             compIndex = 50
             if len(pts) > compIndex:
                 compArr = [] #test how many of last 10 frames where within the range of curr point, put in array, the see if that array is mostly true/false
