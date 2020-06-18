@@ -4,6 +4,7 @@ import argparse
 import imutils
 import cv2
 import screenshot
+import time
 
 camera = cv2.VideoCapture(0)
 (grabbed, frame) = camera.read()
@@ -13,6 +14,7 @@ errorMargin = 2000
 
 #gives a array of background to compare to
 initArr = screenshot.beforeDart()
+time.sleep(0.5)
 
 while True:
     (grabbed, frame) = camera.read()
@@ -23,5 +25,5 @@ while True:
         screenshot.showResult(compArr)
         break
     
-    #print(len(compArr))
+    print('curr len' + str(len(compArr)))
     cv2.imwrite('assets/screenshot.png', frame)
