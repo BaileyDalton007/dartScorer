@@ -57,7 +57,15 @@ def afterDart(arr):
     for i in range(len(coordArr)):
         pointArr.append((coordArr[i][0][0], coordArr[i][0][1]))
 
-    diffArr = list(set(pointArr) - set(arr))
+    #diffArr = list(set(pointArr) - set(arr))
+    diffArr = []
+    nearRadius = 10
+    for i in range(len(pointArr)):
+        for j in range(len(arr))
+            if (pointArr[i][0] - arr[j][0])^2 + (pointArr[i][1] - arr[j][1])^2 < nearRadius^2:
+                pass
+            else:
+                diffArr.append(pointArr[i])
     return diffArr
     
 
