@@ -31,7 +31,12 @@ def beforeDart():
 
     #get all non zero values
     coordArr = cv2.findNonZero(maskBi)
-    return coordArr
+    coordArr = coordArr.tolist()
+    pointArr = []
+    for i in range(len(coordArr)):
+        pointArr.append((coordArr[i][0][0], coordArr[i][0][1]))
+
+    return pointArr
 
 def afterDart(arr):
     img = cv2.imread('assets/screenshot.png')
@@ -46,8 +51,13 @@ def afterDart(arr):
 
     #get all non zero values
     coordArr = cv2.findNonZero(maskBi)
+    coordArr = coordArr.tolist()
 
-    diffArr = list(set(coordArr) - set(arr))
+    pointArr = []
+    for i in range(len(coordArr)):
+        pointArr.append((coordArr[i][0][0], coordArr[i][0][1]))
+
+    diffArr = list(set(pointArr) - set(arr))
     return diffArr
     
 
