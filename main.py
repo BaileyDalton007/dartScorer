@@ -9,7 +9,7 @@ camera = cv2.VideoCapture(0)
 (grabbed, frame) = camera.read()
 cv2.imwrite('assets/screenshot.png', frame)
 
-errorMargin = 10
+errorMargin = 2000
 
 #gives a array of background to compare to
 initArr = screenshot.beforeDart()
@@ -20,7 +20,8 @@ while True:
     compArr = screenshot.afterDart(initArr)
     if len(compArr) > errorMargin:
         print('found!')
+        screenshot.showResult(compArr)
         break
     
-    print(len(compArr))
+    #print(len(compArr))
     cv2.imwrite('assets/screenshot.png', frame)
