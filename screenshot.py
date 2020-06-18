@@ -3,7 +3,7 @@ import imutils
 import cv2
 
 colorLower = (5, 100, 100)
-colorUpper = (5, 255, 255)
+colorUpper = (15, 255, 255)
 
 
 def bestFit(X, Y):
@@ -17,7 +17,6 @@ def bestFit(X, Y):
     b = numer / denum
     a = ybar - b * xbar
     return a, b
-
 
 def beforeDart():
     img = cv2.imread('assets/screenshot.png')
@@ -33,7 +32,7 @@ def beforeDart():
     #get all non zero values
     coordArr = cv2.findNonZero(maskBi)
     return coordArr
-       
+
 def afterDart(arr):
     img = cv2.imread('assets/screenshot.png')
     frame = imutils.resize(img, width=600)
@@ -49,9 +48,11 @@ def afterDart(arr):
     coordArr = cv2.findNonZero(maskBi)
 
     diffArr = list(set(coordArr) - set(arr))
+    return diffArr
     
 
 
+def showResult():
     xArr = []
     yArr = []
     img = cv2.imread('assets/screenshot.png')
@@ -68,5 +69,5 @@ def afterDart(arr):
         img = cv2.line(img,startPoint,endPoint,(255,0,0),5)
     else: 
         print('No color recognized')
-
-cv2.imwrite('assets/test.png', img)
+    cv2.imwrite('assets/test.png', img)
+    
