@@ -2,8 +2,8 @@ import numpy as np
 import imutils
 import cv2
 
-colorLower = (7, 100, 100)
-colorUpper = (15, 255, 255)
+colorLower = (3, 100, 100)
+colorUpper = (17, 255, 255)
 
 
 def bestFit(X, Y):
@@ -20,7 +20,7 @@ def bestFit(X, Y):
 
 def beforeDart():
     img = cv2.imread('assets/screenshot.png')
-    frame = imutils.resize(img, width=600)
+    frame = imutils.resize(img, width=100)
     frame = imutils.rotate(img, angle=180)
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv, colorLower, colorUpper)
@@ -31,7 +31,7 @@ def beforeDart():
 
     #get all non zero values
     coordArr = cv2.findNonZero(maskBi)
-    if coordArr == None:
+    if coordArr is None:
         coordArr = []
     else:
         coordArr = coordArr.tolist()
@@ -43,7 +43,7 @@ def beforeDart():
 
 def afterDart(arr):
     img = cv2.imread('assets/screenshot.png')
-    frame = imutils.resize(img, width=600)
+    frame = imutils.resize(img, width=100)
     frame = imutils.rotate(img, angle=180)
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv, colorLower, colorUpper)
@@ -75,7 +75,7 @@ def showResult(coordArr):
     img = cv2.imread('assets/screenshot.png')
 
     clusterArr = []
-    clusterRange = 1
+    clusterRange = 40
     for i in range(len(coordArr)):
         score = 0
         for j in range(len(coordArr)):
@@ -88,10 +88,15 @@ def showResult(coordArr):
 
     newClusterArr = clusterArr
     newClusterArr.sort()
-    highestScore = newClusterArr[-1]
-    clusterPos = clusterArr.index(highestScore)
-    clusterPoint = coordArr[clusterPos]
-
+    highestScores = []
+    clusterPos = []
+    clusterPoint = []
+    numClusterPts = 2
+    for i in range(numClusterPts):
+        highestScores.append(newClusterArr[(i+1)*-1])
+    for i in range(numClusterPts):
+        clusterPos.append(clusterArr.index(highestScores[i]))
+        clusterPoint.append(coordArr[clusterPos[i]])        
 
     if coordArr and len(coordArr) > 0:
         for i in range(len(coordArr)):
@@ -106,7 +111,8 @@ def showResult(coordArr):
         img = cv2.line(img,startPoint,endPoint,(255,0,0),5)
     else: 
         print('No color recognized')
-    cv2.circle(img, clusterPoint, 2, (0, 0, 255), 5)
+    for i in range(len(clusterPoint)):
+        cv2.circle(img, clusterPoint[i], 2, (0, 0, 255), clusterRange)
     
     cv2.imwrite('assets/test.png', img)
     
