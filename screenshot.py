@@ -74,45 +74,60 @@ def showResult(coordArr):
     yArr = []
     img = cv2.imread('assets/screenshot.png')
 
-    clusterArr = []
     clusterRange = 40
-    for i in range(len(coordArr)):
-        score = 0
-        for j in range(len(coordArr)):
-            if i == j:
-                pass
-            else:
-                if (coordArr[i][0] - coordArr[j][0])^2 + (coordArr[i][1] - coordArr[j][1])^2 < clusterRange^2:
-                    score = score + 1
-        clusterArr.append(score)
-
-    newClusterArr = clusterArr
-    newClusterArr.sort()
-    highestScores = []
-    clusterPos = []
-    clusterPoint = []
     numClusterPts = 2
-    for i in range(numClusterPts):
-        highestScores.append(newClusterArr[(i+1)*-1])
-    for i in range(numClusterPts):
-        clusterPos.append(clusterArr.index(highestScores[i]))
-        clusterPoint.append(coordArr[clusterPos[i]])        
+    clusterPointArr = []
 
-    if coordArr and len(coordArr) > 0:
+
+    for x in range(numClusterPts):
+        clusterArr = []
         for i in range(len(coordArr)):
-            cv2.circle(img, (coordArr[i][0], coordArr[i][1]), 2, (0, 255, 255), -1)
-            xArr.append(coordArr[i][0])
-            yArr.append(coordArr[i][1])
+            score = 0
+            for j in range(len(coordArr)):
+                if i == j:
+                    pass
+                else:
+                    if (coordArr[i][0] - coordArr[j][0])^2 + (coordArr[i][1] - coordArr[j][1])^2 < clusterRange^2:
+                        score = score + 1
+            clusterArr.append(score)
 
-        a, b = bestFit(xArr, yArr)
-        height, width, channels = img.shape
-        startPoint = (0, int(a))
-        endPoint = (width, int(a+b*width))
-        img = cv2.line(img,startPoint,endPoint,(255,0,0),5)
-    else: 
-        print('No color recognized')
-    for i in range(len(clusterPoint)):
-        cv2.circle(img, clusterPoint[i], 2, (0, 0, 255), clusterRange)
+        newClusterArr = clusterArr
+        newClusterArr.sort()
+        highestScores = []
+        
+        highestScores.append(newClusterArr[-1])
+        clusterPos = clusterArr.index(highestScores[0])
+        print('clusterPos:' + str(clusterPos))
+        print('coordARR:' + str(len(coordArr)))
+        print('Iteration:' + str(x))
+
+        clusterPoint = coordArr[clusterPos]
+        clusterPointArr.append(clusterPoint)
+        removeArr = []
+        for j in range(len(coordArr)):
+            if (coordArr[clusterPos][0] - coordArr[j][0])^2 + (coordArr[clusterPos][1] - coordArr[j][1])^2 < clusterRange^2:
+                removeArr.append(coordArr[j])
+
+        for i in range(len(removeArr)):
+            coordArr.remove(removeArr[i])            
+
+    #if coordArr and len(coordArr) > 0:
+    #    for i in range(len(coordArr)):
+    #        cv2.circle(img, (coordArr[i][0], coordArr[i][1]), 2, (0, 255, 255), -1)
+    #        xArr.append(coordArr[i][0])
+    #        yArr.append(coordArr[i][1])
+
+    #    a, b = bestFit(xArr, yArr)
+    #    height, width, channels = img.shape
+    #    startPoint = (0, int(a))
+    #    endPoint = (width, int(a+b*width))
+    #img = cv2.line(img,clusterPointArr[0],clusterPointArr[1],(255,0,0),5)
+    #else: 
+    #    print('No color recognized')
+    print('Arr:'+ str(len(clusterPointArr)))
+    img = cv2.line(img,clusterPointArr[0],clusterPointArr[1],(255,0,0),5)
+    for i in range(len(clusterPointArr)):
+        cv2.circle(img, clusterPointArr[i], 2, (0, 0, 255), 5)
     
     cv2.imwrite('assets/test.png', img)
     
